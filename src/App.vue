@@ -55,7 +55,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="report in filteredReports" :key="report.uuid">
+                <tr v-for="report in displayedReports" :key="report.uuid">
                     <td>{{ report.body.bankName }}</td>
                     <td>{{ report.body.bankBIC[0] }}</td>
                     <td>{{ report.body.reportScore }}</td>
@@ -65,7 +65,19 @@
                 </tr>
             </tbody>
         </table>
-        <div class="pagination"></div>
+        <div class="pagination">
+            <p>
+                <button v-if="currentPage > 1" @click="prevPage">
+                    Previous
+                </button>
+                <button
+                    v-if="filteredReports.length > pageLimit * currentPage"
+                    @click="nextPage"
+                >
+                    Next
+                </button>
+            </p>
+        </div>
     </div>
 </template>
 
@@ -87,7 +99,9 @@ export default {
             bankQuery: "",
             bicQuery: "",
             publishedFilter: false,
-            types: []
+            types: [],
+            pageLimit: 15,
+            currentPage: 1
         };
     },
     computed: {
@@ -128,6 +142,18 @@ export default {
                 );
             }
             return reports;
+        },
+        displayedReports() {
+            return this.filteredReports.filter((report, index) => {
+                let start = (this.currentPage - 1) * this.pageLimit;
+                let end = this.currentPage * this.pageLimit;
+                if (index >= start && index < end) return true;
+            });
+        }
+    },
+    watch: {
+        filteredReports() {
+            this.currentPage = 1;
         }
     },
     methods: {
@@ -138,6 +164,13 @@ export default {
             this.bankQuery = "";
             this.bicQuery = "";
             this.types = [];
+            this.currentPage = 1;
+        },
+        nextPage() {
+            this.currentPage++;
+        },
+        prevPage() {
+            this.currentPage--;
         }
     }
 };
