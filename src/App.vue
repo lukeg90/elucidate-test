@@ -36,8 +36,11 @@
             <input type="number" id="minScore" v-model="minScore" />
             <label for="maxScore">Maximum:</label>
             <input type="number" id="maxScore" v-model="maxScore" /><br />
-            <label for="bank-name">Bank name:</label>
-            <input type="text" id="bank-name" v-model="bankQuery" /><br />
+            <h3>Bank Details</h3>
+            <label for="bank-name">Name:</label>
+            <input type="text" id="bank-name" v-model="bankQuery" />
+            <label for="bix">BIC:</label>
+            <input type="text" id="bic" v-model="bicQuery" /><br />
             <button @click="reset">Reset Filters</button>
         </div>
         <table>
@@ -71,7 +74,7 @@ import reports from "../public/reports.json";
 
 // todo
 // 1. pagination
-// 2. ability to apply multiple filters
+// 2. ability to apply multiple filters - DONE
 // 3. add style to form - flexbox?
 
 export default {
@@ -82,6 +85,7 @@ export default {
             minScore: null,
             maxScore: null,
             bankQuery: "",
+            bicQuery: "",
             publishedFilter: false,
             types: []
         };
@@ -116,6 +120,13 @@ export default {
                     regex.test(report.body.bankName)
                 );
             }
+            if (this.bicQuery) {
+                let regexString = this.bicQuery;
+                let regex = new RegExp(regexString, "gi");
+                reports = reports.filter(report =>
+                    regex.test(report.body.bankBIC[0])
+                );
+            }
             return reports;
         }
     },
@@ -125,6 +136,7 @@ export default {
             this.minScore = null;
             this.maxScore = null;
             this.bankQuery = "";
+            this.bicQuery = "";
             this.types = [];
         }
     }
