@@ -2,19 +2,43 @@
     <div id="app">
         <div class="filter">
             <h2>Filter by:</h2>
-            <button @click="published">Already published</button><br />
+            <input
+                type="checkbox"
+                id="published"
+                value="true"
+                v-model="publishedFilter"
+            />
+            <label for="published">Already published</label>
             <h3>Type:</h3>
-            <button @click="extended">Extended</button>
-            <button @click="intermediate">Intermediate</button>
-            <button @click="primary">Primary</button><br />
+            <input
+                type="checkbox"
+                id="extended"
+                value="extended"
+                v-model="types"
+            />
+            <label for="extended">Extended</label>
+            <input
+                type="checkbox"
+                id="intermediate"
+                value="intermediate"
+                v-model="types"
+            />
+            <label for="intermediate">Intermediate</label>
+            <input
+                type="checkbox"
+                id="primary"
+                value="primary"
+                v-model="types"
+            />
+            <label for="primary">Primary</label>
             <h3>Score:</h3>
-            From <input type="number" v-model="minScore" /> to
-            <input type="number" v-model="maxScore" />
-            <button @click="scoreRange">Check</button>
-            <h2>Search by:</h2>
+            <label for="minScore">Minimum:</label>
+            <input type="number" id="minScore" v-model="minScore" />
+            <label for="maxScore">Maximum:</label>
+            <input type="number" id="maxScore" v-model="maxScore" /><br />
             <label for="bank-name">Bank name:</label>
-            <input type="text" id="bank-name" v-model="bankQuery" />
-            <button @click="nameMatch">Search</button>
+            <input type="text" id="bank-name" v-model="bankQuery" /><br />
+            <button @click="reset">Reset Filters</button>
         </div>
         <table>
             <thead>
@@ -45,49 +69,63 @@
 <script>
 import reports from "../public/reports.json";
 
+// todo
+// 1. pagination
+// 2. ability to apply multiple filters
+// 3. add style to form - flexbox?
+
 export default {
     name: "App",
     data: () => {
         return {
             reports: reports,
-            filteredReports: reports,
             minScore: null,
             maxScore: null,
-            bankQuery: ""
+            bankQuery: "",
+            publishedFilter: false,
+            types: []
         };
     },
+    computed: {
+        filteredReports() {
+            let reports = this.reports;
+            if (this.publishedFilter) {
+                reports = reports.filter(
+                    report => Date.parse(report.publishedAt) < new Date()
+                );
+            }
+            if (this.types.length !== 0) {
+                reports = reports.filter(report =>
+                    this.types.includes(report.body.type)
+                );
+            }
+            if (this.minScore) {
+                reports = reports.filter(
+                    report => report.body.reportScore >= this.minScore
+                );
+            }
+            if (this.maxScore) {
+                reports = reports.filter(
+                    report => report.body.reportScore <= this.maxScore
+                );
+            }
+            if (this.bankQuery) {
+                let regexString = this.bankQuery;
+                let regex = new RegExp(regexString, "gi");
+                reports = reports.filter(report =>
+                    regex.test(report.body.bankName)
+                );
+            }
+            return reports;
+        }
+    },
     methods: {
-        published() {
-            this.filteredReports = this.reports.filter(
-                report => Date.parse(report.publishedAt) < new Date()
-            );
-        },
-        extended() {
-            this.filteredReports = this.reports.filter(
-                report => report.body.type == "extended"
-            );
-        },
-        intermediate() {
-            this.filteredReports = this.reports.filter(
-                report => report.body.type == "intermediate"
-            );
-        },
-        primary() {
-            this.filteredReports = this.reports.filter(
-                report => report.body.type == "primary"
-            );
-        },
-        scoreRange() {
-            this.filteredReports = this.reports.filter(
-                report =>
-                    report.body.reportScore >= this.minScore &&
-                    report.body.reportScore <= this.maxScore
-            );
-        },
-        nameMatch() {
-            this.filteredReports = this.reports.filter(report =>
-                report.body.bankName.startsWith(this.bankQuery)
-            );
+        reset() {
+            this.publishedFilter = false;
+            this.minScore = null;
+            this.maxScore = null;
+            this.bankQuery = "";
+            this.types = [];
         }
     }
 };
@@ -123,8 +161,8 @@ td {
 button {
     background: #2c3e50;
     color: #caebd8;
-    font-size: 20px;
-    border-radius: 20px;
+    font-size: 17px;
+    /* border-radius: 20px; */
     cursor: pointer;
     margin: 5px;
     padding: 10px;
