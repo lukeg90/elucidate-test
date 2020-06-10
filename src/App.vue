@@ -52,8 +52,8 @@
                     <td>{{ report.body.bankBIC[0] }}</td>
                     <td>{{ report.body.reportScore }}</td>
                     <td>{{ report.body.type }}</td>
-                    <td>{{ report.createdAt }}</td>
-                    <td>{{ report.publishedAt }}</td>
+                    <td>{{ formatDate(report.createdAt) }}</td>
+                    <td>{{ formatDate(report.publishedAt) }}</td>
                 </tr>
             </tbody>
         </table>
@@ -168,6 +168,18 @@ export default {
         },
         prevPage() {
             this.currentPage--;
+        },
+        formatDate(dateString) {
+            const options = {
+                day: "numeric",
+                month: "numeric",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                timeZone: "UTC",
+                timeZoneName: "short"
+            };
+            return new Date(dateString).toLocaleString("en-GB", options);
         }
     }
 };
