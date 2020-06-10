@@ -145,7 +145,7 @@ export default {
             });
         },
         numPages() {
-            return Math.round(this.filteredReports.length / this.pageLimit);
+            return Math.ceil(this.filteredReports.length / this.pageLimit);
         }
     },
     watch: {
