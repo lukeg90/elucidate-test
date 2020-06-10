@@ -2,46 +2,38 @@
     <div id="app">
         <div class="filter">
             <h2>Filter by:</h2>
-            <input
-                type="checkbox"
-                id="published"
-                value="true"
-                v-model="publishedFilter"
-            />
-            <label for="published">Already published</label>
+            <label class="b-contain">
+                <span>Already Published</span>
+                <input type="checkbox" value="true" v-model="publishedFilter" />
+                <div class="b-input"></div>
+            </label>
             <h3>Type:</h3>
-            <input
-                type="checkbox"
-                id="extended"
-                value="extended"
-                v-model="types"
-            />
-            <label for="extended">Extended</label>
-            <input
-                type="checkbox"
-                id="intermediate"
-                value="intermediate"
-                v-model="types"
-            />
-            <label for="intermediate">Intermediate</label>
-            <input
-                type="checkbox"
-                id="primary"
-                value="primary"
-                v-model="types"
-            />
-            <label for="primary">Primary</label>
+            <label class="b-contain">
+                <span>Extended</span>
+                <input type="checkbox" value="extended" v-model="types" />
+                <div class="b-input"></div>
+            </label>
+            <label class="b-contain">
+                <span>Intermediate</span>
+                <input type="checkbox" value="intermediate" v-model="types" />
+                <div class="b-input"></div>
+            </label>
+            <label class="b-contain">
+                <span>Primary</span>
+                <input type="checkbox" value="primary" v-model="types" />
+                <div class="b-input"></div>
+            </label>
             <h3>Score:</h3>
-            <label for="minScore">Minimum:</label>
+            <label class="input-label" for="minScore">Minimum:</label>
             <input type="number" id="minScore" v-model="minScore" />
             <label for="maxScore">Maximum:</label>
             <input type="number" id="maxScore" v-model="maxScore" /><br />
-            <h3>Bank Details</h3>
+            <h3>Bank Details:</h3>
             <label for="bank-name">Name:</label>
             <input type="text" id="bank-name" v-model="bankQuery" />
-            <label for="bix">BIC:</label>
+            <label for="bic">BIC:</label>
             <input type="text" id="bic" v-model="bicQuery" /><br />
-            <button @click="reset">Reset Filters</button>
+            <button class="reset" @click="reset">Reset Filters</button>
         </div>
         <table>
             <thead>
@@ -177,39 +169,259 @@ export default {
 </script>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
-    margin-top: 60px;
+    margin-top: 20px;
+}
+
+body {
+    background: #99c1b9;
+}
+
+.filter {
+    color: #2b2d42;
 }
 
 table {
+    width: 100%;
+    max-width: 100vw;
     border-collapse: collapse;
-    border: 3px solid #2c3e50;
+    border: 3px solid #2b2d42;
+}
+
+tbody tr:nth-child(odd) {
+    background: #d4afb9;
+}
+
+tbody tr:nth-child(even) {
+    background: #bda0bc;
 }
 
 th {
     text-align: left;
-    background: #0e2e1c;
-    color: #caebd8;
+    background: #2b2d42;
+    color: #d4afb9;
     padding: 10px;
 }
 
 td {
     text-align: left;
     padding: 8px;
-    border: 2px solid #2c3e50;
+    /* border: 2px solid #2c3e50; */
+    color: #2b2d42;
 }
 
 button {
-    background: #2c3e50;
-    color: #caebd8;
+    background: #2b2d42;
+    color: #d4afb9;
     font-size: 17px;
     /* border-radius: 20px; */
     cursor: pointer;
-    margin: 5px;
     padding: 10px;
+    font-weight: bolder;
+}
+
+label {
+    font-weight: bolder;
+}
+
+input[type="number"] {
+    background: #2b2d42;
+    color: #d4afb9;
+    margin-left: 10px;
+    margin-right: 10px;
+    border: 0px;
+    width: 50px;
+    border-radius: 5px;
+    font-weight: bolder;
+    height: 20px;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type="text"] {
+    background: #2b2d42;
+    color: #d4afb9;
+    margin-left: 10px;
+    margin-right: 10px;
+    border: 0px;
+    width: 200px;
+    height: 20px;
+    font-weight: bolder;
+    border-radius: 5px;
+}
+
+input:focus {
+    box-shadow: 0 0 0 2px rgba(75, 198, 185, 0.5019607843137255);
+}
+
+.reset {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* checkboxes */
+
+.b-contain *,
+.b-contain *::before,
+.b-contain *::after {
+    box-sizing: content-box !important;
+}
+
+.b-contain input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+
+.b-contain span {
+    line-height: 1.54;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: bolder;
+}
+
+.b-contain {
+    display: table;
+    position: relative;
+    padding-left: 1.8rem;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+}
+
+.b-contain input[type="checkbox"] ~ .b-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1.25rem;
+    width: 1.25rem;
+    background: rgba(241, 245, 248, 1);
+    transition: background 250ms;
+    border: 1px solid #2b2d42;
+    border-radius: 0.125rem;
+}
+
+.b-contain input[type="checkbox"] ~ .b-input::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 0.45rem;
+    top: 0.18rem;
+    width: 0.25rem;
+    height: 0.6rem;
+    border: solid rgba(212, 175, 185, 1);
+    border-width: 0 2px 2px 0;
+    transition: background 250ms;
+    transform: rotate(45deg);
+}
+
+.b-contain input:checked ~ .b-input::after {
+    display: block;
+}
+
+.b-contain:hover input ~ .b-input,
+.b-contain input:focus ~ .b-input {
+    background: rgb(231, 238, 243);
+}
+
+.b-contain input:focus ~ .b-input {
+    box-shadow: 0 0 0 2px rgba(75, 198, 185, 0.5019607843137255);
+}
+
+.b-contain input:checked ~ .b-input {
+    background: rgba(43, 45, 66, 1);
+    border-color: rgba(43, 45, 66, 1);
+}
+
+.b-contain input[type="checkbox"]:disabled ~ .b-input {
+    background: rgba(241, 245, 248, 1);
+    border-color: rgba(184, 194, 204, 1);
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.b-contain input:checked:focus ~ .b-input,
+.b-contain:hover input:not([disabled]):checked ~ .b-input {
+    background: rgba(43, 45, 66, 1);
+    border-color: rgba(43, 45, 66, 1);
+}
+
+.b-contain .b-input::before {
+    content: "";
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3rem;
+    height: 3rem;
+    margin-left: -0.85rem;
+    margin-top: -0.85rem;
+    background: rgba(0, 130, 243, 1);
+    border-radius: 2rem;
+    opacity: 0.6;
+    z-index: 99999;
+    transform: scale(0);
+}
+
+@keyframes b-ripple {
+    0% {
+        transform: scale(0);
+    }
+
+    20% {
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+}
+
+@keyframes b-ripple-duplicate {
+    0% {
+        transform: scale(0);
+    }
+
+    30% {
+        transform: scale(1);
+    }
+
+    60% {
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+}
+
+.b-contain input + .b-input::before {
+    animation: b-ripple 250ms ease-out;
+}
+
+.b-contain input:checked + .b-input::before {
+    animation-name: b-ripple-duplicate;
+}
+
+.b-contain .b-input::before {
+    visibility: hidden;
+}
+
+.b-contain input:focus + .b-input::before {
+    visibility: visible;
+}
+
+.b-contain:first-child .b-input::before {
+    visibility: hidden;
 }
 </style>
