@@ -59,6 +59,8 @@
         </table>
         <div class="pagination">
             <p>
+                <span>Page {{ currentPage }} of {{ numPages }}</span
+                ><br />
                 <button v-if="currentPage > 1" @click="prevPage">
                     Previous
                 </button>
@@ -92,7 +94,7 @@ export default {
             bicQuery: "",
             publishedFilter: false,
             types: [],
-            pageLimit: 15,
+            pageLimit: 10,
             currentPage: 1
         };
     },
@@ -141,6 +143,9 @@ export default {
                 let end = this.currentPage * this.pageLimit;
                 if (index >= start && index < end) return true;
             });
+        },
+        numPages() {
+            return Math.round(this.filteredReports.length / this.pageLimit);
         }
     },
     watch: {
@@ -178,6 +183,7 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     margin-top: 20px;
+    color: #2b2d42;
 }
 
 body {
@@ -190,7 +196,6 @@ body {
 
 table {
     width: 100%;
-    max-width: 100vw;
     border-collapse: collapse;
     border: 3px solid #2b2d42;
 }
@@ -221,10 +226,16 @@ button {
     background: #2b2d42;
     color: #d4afb9;
     font-size: 17px;
-    /* border-radius: 20px; */
     cursor: pointer;
     padding: 10px;
     font-weight: bolder;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 140px;
+}
+
+.pagination {
+    text-align: center;
 }
 
 label {
@@ -264,8 +275,8 @@ input:focus {
 }
 
 .reset {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 /* checkboxes */
