@@ -4,7 +4,12 @@
             <h2>Filter by:</h2>
             <label class="b-contain">
                 <span>Already Published</span>
-                <input type="checkbox" value="true" v-model="publishedFilter" />
+                <input
+                    id="published"
+                    type="checkbox"
+                    value="true"
+                    v-model="publishedFilter"
+                />
                 <div class="b-input"></div>
             </label>
             <h3>Type:</h3>
@@ -53,7 +58,9 @@
                     <td>{{ report.body.reportScore }}</td>
                     <td>{{ report.body.type }}</td>
                     <td>{{ formatDate(report.createdAt) }}</td>
-                    <td>{{ formatDate(report.publishedAt) }}</td>
+                    <td class="published-at">
+                        {{ formatDate(report.publishedAt) }}
+                    </td>
                 </tr>
             </tbody>
         </table>
